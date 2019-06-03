@@ -49,6 +49,8 @@ class GradualWarmupScheduler(_LRScheduler):
             if self.finished and self.after_scheduler:
                 return self.after_scheduler.step(epoch)
             else:
-                return super(GradualWarmupScheduler, self).step(epoch)
+                params = super(GradualWarmupScheduler, self).step(epoch)
+                self.after_scheduler.last_epoch = self.last_epoch
+                return params
         else:
             self.step_ReduceLROnPlateau(metrics, epoch)
